@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All posts</title>
+</head>
+<body>
+    <div style="max-width: 500px; font-family: sans-serif;">
+    {% for post in posts %}
+        <div style="margin-bottom: 20px;">
+            <b style="font-size: 1.2em;">{{ post.author.username }}</b>
+            <p style="margin: 5px 0;">{{ post.post_text }}</p>
+            <small style="color: gray;">{{ post.post_time }}</small>
+            <hr style="border: 0; border-top: 1px solid #eee; margin-top: 15px;">
+        </div>
+    {% endfor %}
+</div>
+</body>
+</html>
