@@ -101,6 +101,7 @@
 <div class="header-card">
     {% if user.is_authenticated %}
         <h3>👋 Привет, {{ user.username }}</h3>
+        <a href="user/create-post" class="btn-link">Создать пост</a>
         <a href="/logout/" class="btn-link">Выйти</a>
     {% else %}
         <h3>Добро пожаловать</h3>
