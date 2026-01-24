@@ -21,7 +21,6 @@ def create_posts(request): # метод создания поста
         text = request.POST.get("post_text")
         if text:
             Post.objects.create(post_text=text, author=request.user) # добавление поста в базу(модели)
-            return redirect("/posts/")
-    if request.method == 'GET':
-        pass
+            return redirect("/")
+        return render(request, "create_post.html", context={"error": 'Заполните поле!'})
     return render(request, 'create_post.html', )

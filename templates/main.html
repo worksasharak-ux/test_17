@@ -1,104 +1,11 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All posts</title>
-    <style>
-        :root {
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --primary-color: #007bff;
-            --text-main: #1c1e21;
-            --text-secondary: #65676b;
-        }
+{% extends 'parts/base.html' %}
+{% block title %}
+    Posts
+{% endblock %}
+{% block content %}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* Шапка / Профиль */
-        .header-card {
-            width: 100%;
-            max-width: 500px;
-            background: var(--card-bg);
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-        }
-
-        .header-card h3 { margin: 0; font-size: 1.1rem; }
-
-        .btn-link {
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: 600;
-            transition: opacity 0.2s;
-        }
-        .btn-link:hover { opacity: 0.7; }
-
-        /* Лента постов */
-        .feed {
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .post-card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 16px;
-            transition: transform 0.1s;
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .post-author {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--text-main);
-        }
-
-        .post-text {
-            font-size: 1.05rem;
-            line-height: 1.5;
-            margin: 0 0 12px 0;
-            white-space: pre-wrap; /* Сохраняет переносы строк пользователя */
-        }
-
-        .post-footer {
-            border-top: 1px solid #f0f2f5;
-            padding-top: 10px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .post-time {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-        }
-    </style>
-</head>
-<body>
-
-<div class="header-card">
+<!-- Заголовок и кнопки: используем класс auth-card для единообразия -->
+<div class="auth-card">
     {% if user.is_authenticated %}
         <h3>👋 Привет, {{ user.username }}</h3>
         <a href="user/create-post" class="btn-link">Создать пост</a>
@@ -109,23 +16,21 @@
     {% endif %}
 </div>
 
-<div class="feed">
-    {% for post in posts %}
-        <article class="post-card">
-            <div class="post-header">
-                <span class="post-author">{{ post.author.username }}</span>
-            </div>
+<!-- Лента постов: просто перебираем посты, каждый будет отдельной карточкой -->
+{% for post in posts %}
+    <article class="post-card">
+        <div class="post-header">
+            <span class="post-author">{{ post.author.username }}</span>
+        </div>
 
-            <p class="post-text">{{ post.post_text }}</p>
+        <p class="post-text">{{ post.post_text }}</p>
 
-            <div class="post-footer">
-                <time class="post-time">{{ post.post_time|date:"d E Y, H:i" }}</time>
-            </div>
-        </article>
-    {% empty %}
-        <p style="text-align: center; color: var(--text-secondary);">Постов пока нет...</p>
-    {% endfor %}
-</div>
+        <div class="post-footer">
+            <time class="post-time">{{ post.post_time|date:"d E Y, H:i" }}</time>
+        </div>
+    </article>
+{% empty %}
+    <p style="text-align: center; color: var(--text-secondary);">Постов пока нет...</p>
+{% endfor %}
 
-</body>
-</html>
+{% endblock %}

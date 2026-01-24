@@ -15,7 +15,13 @@ def login(request):
             return redirect("/login")
 
         auth_login(request, user)
-        return redirect("/posts")
+        #### При входе на страницу создания поста, после логина перекинет на страницу создания поста
+        http_referer = request.META.get('HTTP_REFERER')
+        if "?next" in http_referer:
+            next_redirect = http_referer.split('?next=')[-1]
+            return redirect(next_redirect)
+        ############################################
+        return redirect("/")
 
     return render(request, 'login.html')
 
@@ -33,7 +39,6 @@ def register(request):
         user = authenticate(username=username, password=password)
         if user is None:
             return redirect("/register")
-
         auth_login(request, user)
         return redirect("/posts")
 
