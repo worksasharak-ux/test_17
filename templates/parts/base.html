@@ -4,104 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #eef1f5;
-            --card-bg: #ffffff;
-            --primary-color: #1877f2;
-            --primary-hover: #166fe5;
-            --text-main: #050505;
-            --text-secondary: #606770;
-            --input-border: #ccd0d5;
-            --error-bg: #ffebe9;
-            --error-text: #d73a49;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --accent: #007bff;
+            --accent-hover: #0056b3;
+            --text-main: #1a1d23;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --like: #f91880;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
             color: var(--text-main);
             margin: 0;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 15px;
-            min-height: 100vh;
-            box-sizing: border-box;
+            line-height: 1.5;
         }
 
+        /* Карточки */
         .post-card, .auth-card, .header-card {
             width: 100%;
-            max-width: 500px;
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            box-sizing: border-box;
+            max-width: 550px;
+            background: var(--card);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
             margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid var(--border);
         }
 
-        h2, h3 { margin-top: 0; margin-bottom: 20px; text-align: center; font-weight: 700; }
-        .form-group { margin-bottom: 15px; }
-
-        input, input[type="password"], textarea {
-            width: 100%; padding: 12px 15px; border: 1px solid var(--input-border);
-            border-radius: 6px; font-size: 1rem; font-family: inherit;
-            box-sizing: border-box; outline: none; transition: 0.2s;
-        }
-        input:focus, textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 0 1px var(--primary-color); }
-
-        /* Основной стиль кнопок */
-        button, .submit-btn, .btn-link {
+        /* Кнопки и формы */
+        .btn-link, .submit-btn, button:not(.btn-like) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
-            padding: 12px;
-            background-color: var(--primary-color);
+            padding: 12px 20px;
+            background: var(--accent);
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 1.05rem;
+            border-radius: 10px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            text-decoration: none; /* Для ссылок-кнопок */
-            display: block; /* Для ссылок-кнопок */
-            text-align: center; /* Для ссылок-кнопок */
-            transition: background-color 0.2s;
-            margin-top: 10px; /* Отступ между кнопками на главной */
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+            box-sizing: border-box;
         }
 
-        button:hover, .btn-link:hover { background-color: var(--primary-hover); }
+        .btn-link:hover, .submit-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
-        .footer-link, .back-link {
-            display: block; text-align: center; margin-top: 20px;
-            text-decoration: none; color: var(--text-secondary); font-size: 0.9rem;
+        /* Стильный лайк */
+        .btn-like {
+            all: unset;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: #fdf2f8;
+            color: var(--text-muted);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
         }
 
-        .error {
-            background-color: var(--error-bg); color: var(--error-text);
-            border: 1px solid var(--error-text); padding: 12px;
-            border-radius: 6px; margin-bottom: 15px; text-align: center;
+        .btn-like:hover {
+            background: #fce7f3;
+            color: var(--like);
+            border-color: #fbcfe8;
         }
 
-        /* Стили для элементов поста (без аватарок) */
-        .post-author {
-            font-weight: 600; color: var(--text-main); display: block; margin-bottom: 5px;
-        }
-        .post-author:hover { text-decoration: underline; cursor: pointer; }
-
-        .post-text {
-            line-height: 1.4; font-size: 1rem; margin-top: 0; margin-bottom: 0;
-            white-space: pre-wrap;
+        .btn-like.active {
+            background: var(--like);
+            color: white;
         }
 
-        .post-time {
-            display: block; margin-top: 12px; font-size: 0.8rem; color: var(--text-secondary);
-            border-top: 1px solid var(--bg-color);
-            padding-top: 10px;
+        /* Тексты */
+        .post-author { font-weight: 700; color: var(--text-main); text-decoration: none; font-size: 16px; }
+        .post-text { font-size: 16px; color: var(--text-main); margin: 16px 0; }
+        .post-time { font-size: 13px; color: var(--text-muted); }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
         }
+
+        input:focus { outline: none; border-color: var(--accent); }
+
+        .secondary-btn { background: #64748b !important; }
+        .danger-btn { background: transparent !important; color: #ef4444 !important; border: 1.5px solid #fecaca !important; }
     </style>
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock %}
 </body>
 </html>

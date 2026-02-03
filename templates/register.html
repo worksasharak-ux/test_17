@@ -1,6 +1,7 @@
 {% extends 'parts/base.html' %}
+
 {% block title %}
-    Register
+    Регистрация
 {% endblock %}
 
 {% block content %}
@@ -9,15 +10,17 @@
 
     <form action="/register/" method="POST">
         {% csrf_token %}
-        <div class="form-group">
-            <input type="text" name="username" placeholder="Имя пользователя" required>
-        </div>
-        <div class="form-group">
-            <input type="password" name="password" placeholder="Пароль" required>
-        </div>
+        <!-- Поля используют стили из base.html: закругления, шрифты и фокус -->
+        <input type="text" name="username" placeholder="Имя пользователя" required>
+        <input type="password" name="password" placeholder="Пароль" required>
+
         <button type="submit">Зарегистрироваться</button>
     </form>
 
-    <a href="/login/" class="footer-link">Уже есть аккаунт? Войти</a>
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="/login/" class="footer-link" style="color: var(--text-muted); font-size: 14px; text-decoration: none;">
+            Уже есть аккаунт? <span style="color: var(--accent); font-weight: 600;">Войти</span>
+        </a>
+    </div>
 </div>
 {% endblock %}

@@ -1,36 +1,68 @@
 {% extends 'parts/base.html' %}
+
 {% block title %}
-    Posts
+    Лента постов
 {% endblock %}
+
 {% block content %}
 
-<!-- Заголовок и кнопки: используем класс auth-card для единообразия -->
+<!-- Карточка пользователя / Авторизация -->
 <div class="auth-card">
     {% if user.is_authenticated %}
-        <h3>👋 Привет, {{ user.username }}</h3>
-        <a href="user/create-post" class="btn-link">Создать пост</a>
-        <a href="/logout/" class="btn-link">Выйти</a>
+        <h3>👋 Привет, <span style="color: var(--accent);">{{ user.username }}</span></h3>
+        <div class="nav-links">
+            <a href="/user/create-post" class="btn-link">📝 Создать новый пост</a>
+            <a href="/logout/" class="btn-link danger-btn">Выйти из аккаунта</a>
+        </div>
     {% else %}
         <h3>Добро пожаловать</h3>
-        <a href="/login/" class="btn-link">Войти</a>
+        <div class="nav-links">
+            <a href="/login/" class="btn-link">Войти в систему</a>
+            <a href="/register/" class="btn-link secondary-btn">Регистрация</a>
+        </div>
     {% endif %}
 </div>
 
-<!-- Лента постов: просто перебираем посты, каждый будет отдельной карточкой -->
+<!-- Заголовок ленты -->
+<div class="header-card" style="padding: 12px; text-align: center; border-bottom: 2px solid var(--accent);">
+    <span style="color: var(--text-muted); font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+        {{ title|default:"Свежие записи" }} • {{ posts.count }}
+    </span>
+</div>
+
+<!-- Лента постов -->
 {% for post in posts %}
     <article class="post-card">
         <div class="post-header">
-            <span class="post-author">{{ post.author.username }}</span>
+            <a href="{% url 'posts_id' post.author.id %}" class="post-author">
+                {{ post.author.username }}
+            </a>
         </div>
 
-        <p class="post-text">{{ post.post_text }}</p>
+        <!-- Ссылка на сам пост -->
+        <a href="{% url 'post' post.id %}" class="post-link" style="display: block; margin: 15px 0; text-decoration: none; color: var(--text-main);">
+            <p class="post-text">{{ post.post_text }}</p>
+        </a>
+
+        <!-- Лайки -->
+        <div class="post-likes">
+            <form method="post" action="/post/{{ post.pk }}/like/">
+                {% csrf_token %}
+                <button type="submit" class="btn-like">
+                    <span class="heart-icon">❤</span>
+                    <span class="likes-count">{{ post.likes_count }}</span>
+                </button>
+            </form>
+        </div>
 
         <div class="post-footer">
             <time class="post-time">{{ post.post_time|date:"d E Y, H:i" }}</time>
         </div>
     </article>
 {% empty %}
-    <p style="text-align: center; color: var(--text-secondary);">Постов пока нет...</p>
+    <div class="post-card" style="text-align: center; color: var(--text-muted); padding: 40px;">
+        <p>📭 Тут пока пусто, станьте первым автором!</p>
+    </div>
 {% endfor %}
 
 {% endblock %}
