@@ -19,11 +19,21 @@ class Post(models.Model):
         return PostLike.objects.filter(post=self, author=user).exists()
 
 
+
+
 class Comment(models.Model):
     post = ForeignKey(Post, on_delete=models.CASCADE)
     author = models.ForeignKey(user_model, on_delete=CASCADE)
     text = models.TextField()
     created_at = DateTimeField(auto_now_add=True)
+
+    def clikes_count(self):
+        return CommentLike.objects.filter(comment=self).count()
+
+    def is_cliked_by(self, user):
+        if user.is_anonymous:
+            return False
+        return CommentLike.objects.filter(comment=self, author=user).exists()
 
 
 class Like(models.Model):

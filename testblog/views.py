@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import Post, Comment, PostLike
+from .models import *
 
 User = get_user_model()
 # Create your views here.
@@ -29,6 +29,7 @@ def view_post(request,postid):
     }
     return render(request, 'post.html', context)
 
+@login_required
 def post_likes(request, postid): # лайкать посты
     posts = Post.objects.filter(pk=postid)
     post = posts.first() if posts else None
@@ -44,16 +45,34 @@ def post_likes(request, postid): # лайкать посты
             )
     return redirect(referer)
 
+@login_required
+def comment_likes(request, commentid): # лайкать посты
+    comments = Comment.objects.filter(pk=commentid)
+    comment = comments.first() if comments else None
+    referer = request.META.get("HTTP_REFERER")
+    if comment:
+        likes = CommentLike.objects.filter(comment=comment, author=request.user)
+        if likes:
+            likes.first().delete()
+        else:
+            CommentLike.objects.create(
+                comment=comment,
+                author=request.user
+            )
+    return redirect(referer)
+
+@login_required
 def post_comment(request, postid): # метод создания коммента
-    posts = Post.objects.filter(pk=postid)
-    post = posts.first() if posts else None
-    if post:
-        Comment.objects.create(
-            post=post,
-            author=request.user,
-            text=request.POST.get("text")
-        )
-    return redirect(f"/post/{postid}")
+    if request.method == "POST":
+        posts = Post.objects.filter(pk=postid)
+        post = posts.first() if posts else None
+        if post:
+            Comment.objects.create(
+                post=post,
+                author=request.user,
+                text=request.POST.get("text")
+            )
+        return redirect(f"/post/{postid}")
 
 @login_required # декоратор проверки авторизирован ли пользователь
 def create_posts(request): # метод создания поста
