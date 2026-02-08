@@ -7,9 +7,9 @@ user_model= get_user_model()
 
 class Post(models.Model):
     post_text = TextField(blank=True)
-    author = models.ForeignKey(user_model, on_delete=models.CASCADE)
+    author = ForeignKey(user_model, on_delete=models.CASCADE)
     post_time = DateTimeField(auto_now_add=True)
-    picture = ImageField(null=True, blank=True)
+    picture = ImageField(upload_to="picture/",null=True, blank=True)
 
     def likes_count(self):
         return PostLike.objects.filter(post=self).count()
@@ -21,10 +21,10 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = ForeignKey(Post, on_delete=models.CASCADE)
-    author = models.ForeignKey(user_model, on_delete=CASCADE)
-    text = models.TextField(blank=True)
+    author = ForeignKey(user_model, on_delete=CASCADE)
+    text = TextField(blank=True)
     created_at = DateTimeField(auto_now_add=True)
-    picture = ImageField(null=True, blank=True)
+    picture = ImageField(upload_to="cpicture/",null=True, blank=True)
 
     def clikes_count(self):
         return CommentLike.objects.filter(comment=self).count()
@@ -34,11 +34,19 @@ class Comment(models.Model):
             return False
         return CommentLike.objects.filter(comment=self, author=user).exists()
 
+class Subscription(models.Model):
+    page_user = ForeignKey(user_model, on_delete=CASCADE, related_name="followers")
+    follower = ForeignKey(user_model, on_delete=CASCADE, related_name="subscriptions")
+
+class Views(models.Model):
+    post = ForeignKey(Post, on_delete=CASCADE, related_name="views")
+    follower = ForeignKey(user_model, on_delete=CASCADE, related_name="post_views")
+
 class Like(models.Model):
-    author = models.ForeignKey(user_model, on_delete=CASCADE)
+    author = ForeignKey(user_model, on_delete=CASCADE)
 
 class PostLike(Like):
-    post = models.ForeignKey(Post, on_delete=CASCADE)
+    post = ForeignKey(Post, on_delete=CASCADE)
 
 class CommentLike(Like):
-    comment = models.ForeignKey(Comment, on_delete=CASCADE)
+    comment = ForeignKey(Comment, on_delete=CASCADE)

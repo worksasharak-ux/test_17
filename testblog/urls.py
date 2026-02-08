@@ -10,6 +10,7 @@ urlpatterns = [
     path('post/<int:postid>/comment', post_comment),
     path('comments/<int:commentid>/clike/', comment_likes),
     path('user/<int:userid>', user_posts, name='posts_id'),
+    path('user/<int:userid>/subscribe', subscribe, name='subscribe'),
     path('user/create-post', create_posts),
 ]
 

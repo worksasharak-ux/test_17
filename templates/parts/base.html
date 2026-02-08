@@ -134,6 +134,72 @@
             background: #e2e8f0;
             border-color: var(--accent);
         }
+        .nav-links {
+            display: flex;
+            flex-direction: column; /* Кнопки будут располагаться вертикально, друг под другом */
+            gap: 10px;              /* Расстояние между кнопками */
+            width: 100%;            /* Занимают всю ширину карточки */
+            margin-top: 15px;
+        }
+
+
+        .notifications-title {
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .notifications-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Карточка одного уведомления */
+        .notification-item {
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: rgba(128, 128, 128, 0.05); /* Легкий фон */
+            transition: background 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .notification-item:hover {
+            background: rgba(128, 128, 128, 0.1);
+            border-left: 3px solid var(--accent); /* Подсветка при наведении */
+        }
+
+        /* Ссылка и текст */
+        .notification-link {
+            text-decoration: none;
+            color: var(--text-main);
+            display: block;
+            padding: 10px;
+        }
+
+        .notification-status {
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .notification-author {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .notification-date {
+            display: block;
+            font-size: 0.75em;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .notifications-empty {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+
 
         input:focus { outline: none; border-color: var(--accent); }
 
