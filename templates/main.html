@@ -44,6 +44,14 @@
             <p class="post-text">{{ post.post_text }}</p>
         </a>
 
+        <!-- НОВЫЙ БЛОК: Вывод изображения -->
+        {% if post.picture %}
+        <div class="post-image-container" style="margin-bottom: 15px;">
+            <img src="{{ post.picture.url }}" alt="Изображение поста"
+                 style="width: 100%; border-radius: 8px; display: block; object-fit: cover; max-height: 500px;">
+        </div>
+        {% endif %}
+
         <!-- Лайки -->
         <div class="post-likes">
             <form method="post" action="/post/{{ post.pk }}/like/">

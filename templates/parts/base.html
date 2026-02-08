@@ -107,6 +107,33 @@
             transition: border-color 0.2s;
             box-sizing: border-box;
         }
+        .custom-file-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 12px 20px;
+            background: #f1f5f9; /* Светлый фон, чтобы не сливалась с кнопкой "Опубликовать" */
+            color: var(--text-main);
+            border: 1.5px dashed var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+            box-sizing: border-box;
+        }
+
+        .custom-file-btn:hover {
+            background: #e2e8f0;
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .comment-upload-label:hover {
+            background: #e2e8f0;
+            border-color: var(--accent);
+        }
 
         input:focus { outline: none; border-color: var(--accent); }
 

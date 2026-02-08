@@ -7,7 +7,7 @@ User = get_user_model()
 # Create your views here.
 def main(request):
     context = {
-        "posts" : Post.objects.all(),
+        "posts" : Post.objects.all().order_by('-post_time'),
     }
     return render(request, 'main.html', context)
 
@@ -65,21 +65,28 @@ def comment_likes(request, commentid): # лайкать посты
 def post_comment(request, postid): # метод создания коммента
     if request.method == "POST":
         posts = Post.objects.filter(pk=postid)
+        text = request.POST.get("text")
+        picture = request.FILES.get("picture")
         post = posts.first() if posts else None
         if post:
-            Comment.objects.create(
-                post=post,
-                author=request.user,
-                text=request.POST.get("text")
-            )
+            if text or picture:
+                Comment.objects.create(
+                    post=post,
+                    author=request.user,
+                    text=text,
+                    picture=picture,
+                )
         return redirect(f"/post/{postid}")
 
 @login_required # декоратор проверки авторизирован ли пользователь
 def create_posts(request): # метод создания поста
     if request.method == 'POST':
         text = request.POST.get("post_text")
-        if text:
-            Post.objects.create(post_text=text, author=request.user) # добавление поста в базу(модели)
+        picture = request.FILES.get("picture")
+        if text or picture:
+            Post.objects.create(post_text=text,
+                                author=request.user,
+                                picture=picture) # добавление поста в базу(модели)
             return redirect("/")
         return render(request, "create_post.html", context={"error": 'Заполните поле!'})
     return render(request, 'create_post.html', )

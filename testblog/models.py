@@ -6,9 +6,10 @@ from django.db.models import *
 user_model= get_user_model()
 
 class Post(models.Model):
-    post_text = TextField()
+    post_text = TextField(blank=True)
     author = models.ForeignKey(user_model, on_delete=models.CASCADE)
     post_time = DateTimeField(auto_now_add=True)
+    picture = ImageField(null=True, blank=True)
 
     def likes_count(self):
         return PostLike.objects.filter(post=self).count()
@@ -18,14 +19,12 @@ class Post(models.Model):
             return False
         return PostLike.objects.filter(post=self, author=user).exists()
 
-
-
-
 class Comment(models.Model):
     post = ForeignKey(Post, on_delete=models.CASCADE)
     author = models.ForeignKey(user_model, on_delete=CASCADE)
-    text = models.TextField()
+    text = models.TextField(blank=True)
     created_at = DateTimeField(auto_now_add=True)
+    picture = ImageField(null=True, blank=True)
 
     def clikes_count(self):
         return CommentLike.objects.filter(comment=self).count()
@@ -34,7 +33,6 @@ class Comment(models.Model):
         if user.is_anonymous:
             return False
         return CommentLike.objects.filter(comment=self, author=user).exists()
-
 
 class Like(models.Model):
     author = models.ForeignKey(user_model, on_delete=CASCADE)
