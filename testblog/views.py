@@ -49,11 +49,11 @@ def subscribe(request,userid):
 
     return redirect(referer)
 
-def view_post(request,postid):
+def view_post(request,postid):#просмотр постов
     posts = Post.objects.filter(pk=postid)
     post = posts.first()
 
-    if request.user.is_authenticated:
+    if request.user.is_authenticated: #просмотр новых записей
         Views.objects.get_or_create(post=post, follower=request.user)
 
     context = {

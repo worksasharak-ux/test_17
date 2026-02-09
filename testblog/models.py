@@ -8,16 +8,20 @@ user_model= get_user_model()
 class Post(models.Model):
     post_text = TextField(blank=True)
     author = ForeignKey(user_model, on_delete=models.CASCADE)
-    post_time = DateTimeField(auto_now_add=True)
+    post_time = DateTimeField(auto_now_add=True) # =created_at
     picture = ImageField(upload_to="picture/",null=True, blank=True)
 
     def likes_count(self):
+
         return PostLike.objects.filter(post=self).count()
 
     def is_liked_by(self, user):
         if user.is_anonymous:
             return False
         return PostLike.objects.filter(post=self, author=user).exists()
+
+    def __str__(self):
+        return self.post_text
 
 class Comment(models.Model):
     post = ForeignKey(Post, on_delete=models.CASCADE)
